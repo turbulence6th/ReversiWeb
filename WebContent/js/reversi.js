@@ -329,7 +329,7 @@ class Reversi {
 	        totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
 	    }
 	    
-	    while(currentElement = currentElement.offsetParent)
+	    while(currentElement = currentElement.offsetParent);
 
 	    canvasX = event.pageX - totalOffsetX;
 	    canvasY = event.pageY - totalOffsetY;
@@ -341,7 +341,9 @@ class Reversi {
 	    
 	    if(flips.length != 0) {
 	    	this.addPiece(width, height, -1);
-	    	flips.forEach(f => {
+	    	
+	    	
+    		flips.forEach(f => {
 	    		this.addPiece(f.x, f.y, -1);
 	    	});
 	    	
@@ -355,8 +357,10 @@ class Reversi {
 	    		
 	    	});
 	    	
-	    	this.sendTable();
-	    	
+	    	setTimeout(() => {
+	    		this.sendTable();
+	    	}, 500);
+		    
 	    }
 	    
 	    else {
@@ -412,7 +416,10 @@ class Reversi {
             		alert(message + "\n" + "Black: " + black + "\nWhite: " + white);
             	}
             	
-            	this.lock = false;
+            	else {
+            		this.lock = false;
+            	}
+            	
             }
         });
 	}
