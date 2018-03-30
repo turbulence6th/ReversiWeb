@@ -58,8 +58,13 @@
 		<dependency>
 			<groupId>com.github.turbulence6th</groupId>
 			<artifactId>ReversiAI</artifactId>
-			<version>edb1eb7ca7</version>
+			<version>master-SNAPSHOT</version>
 		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.turbulence6th.reversi.ai</groupId> -->
+		<!-- <artifactId>ReversiAI</artifactId> -->
+		<!-- <version>1.0.0</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>

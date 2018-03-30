@@ -357,9 +357,9 @@ class Reversi {
 	    		
 	    	});
 	    	
-	    	setTimeout(() => {
+	    	
 	    		this.sendTable();
-	    	}, 500);
+	    
 		    
 	    }
 	    
