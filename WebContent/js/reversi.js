@@ -7,7 +7,11 @@ class Reversi {
 		this.width = width < height ? width : height;
 		this.height = this.width;
 		this.pieceRadius = this.width / 18;
-		
+
+		this.mouseWidth = -1;
+		this.mouseHeight = -1;
+		this.mouseFlips = [];
+
 		this.lock = false;
 
 		this.flipTimeout = 150;
@@ -34,7 +38,8 @@ class Reversi {
 		
 		this.colors = {
 				'-1': 'black',
-				'1': 'white'
+				'1': 'white',
+				'-2': '#A9A9A9'
 		};
 		
 		this.hints = [];
@@ -47,6 +52,7 @@ class Reversi {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 		this.canvas.addEventListener('click', event => this.click(event));
+		this.canvas.addEventListener('mousemove', event => this.mousemove(event))
 		this.context = this.canvas.getContext('2d');
 		this.draw();
 	}
@@ -71,10 +77,14 @@ class Reversi {
 			this.context.fillRect(0, (i * this.height / 8) - 1.5, this.width, 3);
 		}
 	}
+
+	showPiece(width, height, player) {
+		this.pieces[width][height] = new Piece(this.context, this.getPieceWidth(width), this.getPieceHeight(height), this.pieceRadius, this.colors[player]);
+	}
 	
 	addPiece(width, height, player) {
 		this.board[width][height] = player;
-		this.pieces[width][height] = new Piece(this.context, this.getPieceWidth(width), this.getPieceHeight(height), this.pieceRadius, this.colors[player]);
+		this.showPiece(width, height, player);
 	}
 	
 	fillHints() {
@@ -311,15 +321,8 @@ class Reversi {
 		
 		return [];
 	}
-	
-	async click(event) {
 
-		if (this.lock) {
-			return;
-		}
-
-		this.lock = true;
-
+	getCoordinates(event) {
 		let totalOffsetX = 0;
 		let totalOffsetY = 0;
 		let currentElement = this.canvas;
@@ -337,13 +340,54 @@ class Reversi {
 		let width = Math.floor(canvasX * 8 / this.width);
 		let height = Math.floor(canvasY * 8 / this.height);
 
+		return [width, height];
+	}
+
+	mousemove(event) {
+		if (this.lock) {
+			return;
+		}
+
+		let coordinates = this.getCoordinates(event);
+		let width = coordinates[0];
+		let height = coordinates[1];
+
+		if (this.mouseWidth === width && this.mouseHeight === height) {
+			return;
+		}
+
+		this.mouseWidth = width;
+		this.mouseHeight = height;
+
+		for (let i = 0; i < this.mouseFlips.length; i++) {
+			this.showPiece(this.mouseFlips[i].x, this.mouseFlips[i].y, 1);
+		}
+
+		this.mouseFlips = this.getFlips(width, height, -1);
+		for (let i = 0; i < this.mouseFlips.length; i++) {
+			this.showPiece(this.mouseFlips[i].x, this.mouseFlips[i].y, -2);
+		}
+	}
+	
+	async click(event) {
+
+		if (this.lock) {
+			return;
+		}
+
+		this.lock = true;
+
+		let coordinates = this.getCoordinates(event);
+		let width = coordinates[0];
+		let height = coordinates[1];
+
 		let flips = this.getFlips(width, height, -1);
 
 		if (flips.length !== 0) {
 			this.addPiece(width, height, -1);
 			await this.sleep(this.flipTimeout);
 
-			for (let i = 0; i <  flips.length; i++) {
+			for (let i = 0; i < flips.length; i++) {
 				this.addPiece(flips[i].x, flips[i].y, -1);
 				await this.sleep(this.flipTimeout);
 			}
@@ -356,6 +400,8 @@ class Reversi {
 				}
 
 			});
+
+			this.mouseFlips = [];
 
 			await this.play();
 
