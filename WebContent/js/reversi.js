@@ -447,7 +447,10 @@ class Reversi {
 			}
 
 			let message = black > white ? "You Win" : black < white ? "You Lose" : "Draw";
-			alert(message + "\n" + "Black: " + black + "\nWhite: " + white);
+			let okPressed = confirm(message + "\n" + "Black: " + black + "\nWhite: " + white + "\nPress ok to play again.");
+			if (okPressed) {
+				location.reload();
+			}
 		} else {
 			this.lock = false;
 		}
