@@ -58,7 +58,7 @@
 		<dependency>
 			<groupId>com.github.turbulence6th</groupId>
 			<artifactId>ReversiAI</artifactId>
-			<version>master-SNAPSHOT</version>
+			<version>-SNAPSHOT</version>
 		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>com.turbulence6th.reversi.ai</groupId> -->
