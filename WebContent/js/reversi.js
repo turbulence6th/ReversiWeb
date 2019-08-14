@@ -449,7 +449,7 @@ class Reversi {
 			let message = black > white ? "You Win" : black < white ? "You Lose" : "Draw";
 			let okPressed = confirm(message + "\n" + "Black: " + black + "\nWhite: " + white + "\nPress ok to play again.");
 			if (okPressed) {
-				location.reload();
+				document.location.reload();
 			}
 		} else {
 			this.lock = false;
